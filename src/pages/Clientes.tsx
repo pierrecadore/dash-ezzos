@@ -99,7 +99,7 @@ function ClientModal({ client, integrations, onClose, onSaved }: {
     setBusy(true); setErro(null)
     const slug = (form.slug?.trim() || form.name).toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
     const payload: Client = { name: form.name.trim(), slug }
-    for (const k of ['razao_social', 'nome_fantasia', 'contact_email', 'whatsapp', 'business_type', 'pixel_id']) {
+    for (const k of ['legal_name', 'contact_name', 'contact_email', 'contact_whatsapp', 'segment', 'dashboard_email']) {
       if (form[k] !== undefined) payload[k] = form[k]
     }
     let clientId = client?.id
@@ -136,16 +136,16 @@ function ClientModal({ client, integrations, onClose, onSaved }: {
           <label className="field">Slug<input className="input" value={form.slug ?? ''} onChange={e => set('slug', e.target.value)} placeholder="gerado do nome se vazio" /></label>
         </div>
         <div className="row">
-          <label className="field">Razão social<input className="input" value={form.razao_social ?? ''} onChange={e => set('razao_social', e.target.value)} /></label>
-          <label className="field">Nome fantasia<input className="input" value={form.nome_fantasia ?? ''} onChange={e => set('nome_fantasia', e.target.value)} /></label>
+          <label className="field">Razão social<input className="input" value={form.legal_name ?? ''} onChange={e => set('legal_name', e.target.value)} /></label>
+          <label className="field">Segmento / tipo de negócio<input className="input" value={form.segment ?? ''} onChange={e => set('segment', e.target.value)} placeholder="Serviços locais" /></label>
+        </div>
+        <div className="row">
+          <label className="field">Nome do contato<input className="input" value={form.contact_name ?? ''} onChange={e => set('contact_name', e.target.value)} /></label>
+          <label className="field">WhatsApp<input className="input" value={form.contact_whatsapp ?? ''} onChange={e => set('contact_whatsapp', e.target.value)} placeholder="(11) 91234-5678" /></label>
         </div>
         <div className="row">
           <label className="field">E-mail de contato<input className="input" value={form.contact_email ?? ''} onChange={e => set('contact_email', e.target.value)} /></label>
-          <label className="field">WhatsApp<input className="input" value={form.whatsapp ?? ''} onChange={e => set('whatsapp', e.target.value)} placeholder="(11) 91234-5678" /></label>
-        </div>
-        <div className="row">
-          <label className="field">Tipo de negócio<input className="input" value={form.business_type ?? ''} onChange={e => set('business_type', e.target.value)} placeholder="Serviços locais" /></label>
-          <label className="field">Pixel (Meta)<input className="input" value={form.pixel_id ?? ''} onChange={e => set('pixel_id', e.target.value)} /></label>
+          <label className="field">E-mail de acesso ao dash<input className="input" value={form.dashboard_email ?? ''} onChange={e => set('dashboard_email', e.target.value)} placeholder="usado para login" /></label>
         </div>
 
         <h2 style={{ fontSize: 14, marginTop: 8 }}>Integrações</h2>

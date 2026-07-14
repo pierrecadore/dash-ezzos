@@ -30,7 +30,7 @@ export function PerfilPage() {
   async function salvar() {
     setBusy(true); setErro(null)
     const payload: Record<string, any> = {}
-    for (const k of ['razao_social', 'nome_fantasia', 'contact_email', 'whatsapp', 'business_type']) {
+    for (const k of ['legal_name', 'contact_email', 'contact_whatsapp', 'segment']) {
       if (form[k] !== undefined) payload[k] = form[k]
     }
     const { error } = await supabase.from('clients').update(payload).eq('id', client!.id)
@@ -56,7 +56,7 @@ export function PerfilPage() {
           <div>
             <strong style={{ fontSize: 20 }}>{nome}</strong>
             <div style={{ color: 'var(--text-3)', fontSize: 13 }}>{session?.user.email}</div>
-            {client?.business_type && <div style={{ color: 'var(--text-3)', fontSize: 13 }}>{client.business_type}</div>}
+            {client?.segment && <div style={{ color: 'var(--text-3)', fontSize: 13 }}>{client.segment}</div>}
           </div>
         </div>
       </div>
@@ -64,11 +64,12 @@ export function PerfilPage() {
       <div className="panel">
         <h2>Informação do Negócio</h2>
         <div className="info-grid" style={{ marginTop: 'var(--sp-4)' }}>
-          <div><span className="lbl">Razão Social</span><strong>{client?.razao_social ?? '—'}</strong></div>
-          <div><span className="lbl">Nome Fantasia</span><strong>{client?.nome_fantasia ?? '—'}</strong></div>
+          <div><span className="lbl">Razão Social</span><strong>{client?.legal_name ?? '—'}</strong></div>
+          <div><span className="lbl">Nome Fantasia</span><strong>{client?.name ?? '—'}</strong></div>
+          <div><span className="lbl">Contato</span><strong>{client?.contact_name ?? '—'}</strong></div>
           <div><span className="lbl">E-mail</span><strong>{client?.contact_email ?? '—'}</strong></div>
-          <div><span className="lbl">Whatsapp</span><strong className="wa">{client?.whatsapp ?? '—'}</strong></div>
-          <div><span className="lbl">Tipo de negócio</span><strong>{client?.business_type ?? '—'}</strong></div>
+          <div><span className="lbl">Whatsapp</span><strong className="wa">{client?.contact_whatsapp ?? '—'}</strong></div>
+          <div><span className="lbl">Tipo de negócio</span><strong>{client?.segment ?? '—'}</strong></div>
         </div>
       </div>
 
@@ -77,14 +78,13 @@ export function PerfilPage() {
           <div className="modal" role="dialog" aria-modal="true">
             <h2>Editar informações do negócio</h2>
             <div className="row">
-              <label className="field">Razão Social<input className="input" value={form.razao_social ?? ''} onChange={e => setForm({ ...form, razao_social: e.target.value })} /></label>
-              <label className="field">Nome Fantasia<input className="input" value={form.nome_fantasia ?? ''} onChange={e => setForm({ ...form, nome_fantasia: e.target.value })} /></label>
+              <label className="field">Razão Social<input className="input" value={form.legal_name ?? ''} onChange={e => setForm({ ...form, legal_name: e.target.value })} /></label>
+              <label className="field">Tipo de negócio<input className="input" value={form.segment ?? ''} onChange={e => setForm({ ...form, segment: e.target.value })} /></label>
             </div>
             <div className="row">
               <label className="field">E-mail<input className="input" value={form.contact_email ?? ''} onChange={e => setForm({ ...form, contact_email: e.target.value })} /></label>
-              <label className="field">Whatsapp<input className="input" value={form.whatsapp ?? ''} onChange={e => setForm({ ...form, whatsapp: e.target.value })} /></label>
+              <label className="field">Whatsapp<input className="input" value={form.contact_whatsapp ?? ''} onChange={e => setForm({ ...form, contact_whatsapp: e.target.value })} /></label>
             </div>
-            <label className="field">Tipo de negócio<input className="input" value={form.business_type ?? ''} onChange={e => setForm({ ...form, business_type: e.target.value })} /></label>
             {erro && <span className="form-error">{erro}</span>}
             <footer>
               <button className="btn ghost" onClick={() => setEditing(false)}>Cancelar</button>
