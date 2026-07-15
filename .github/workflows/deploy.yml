@@ -1,0 +1,33 @@
+name: build-and-push
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest
+          build-args: |
+            VITE_SUPABASE_URL=https://wihzuuvqpkjjtgsugtqp.supabase.co
+            VITE_SUPABASE_ANON_KEY=sb_publishable_IvZ3B9M_zGfRvMQhKOwvDg_zm8UoUiU
