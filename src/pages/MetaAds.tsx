@@ -2,7 +2,7 @@ import {
   ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend,
   BarChart, Bar, CartesianGrid,
 } from 'recharts'
-import { useMetaMetrics, aggregateMeta, fmtBRL, fmtNum } from '../lib/metrics'
+import { useMetaMetrics, aggregateMeta, fmtBRL, fmtNum, useCreatives } from '../lib/metrics'
 import { KpiCard, ChartCard, NoteBar, EmptyState } from '../components/ui'
 import { usePeriodSelector } from './VisaoGeral'
 
@@ -18,6 +18,7 @@ export function MetaAdsPage() {
 
   const m = aggregateMeta(rows ?? [])
   const temDados = (rows ?? []).length > 0
+  const { creatives } = useCreatives()
 
   return (
     <>
@@ -92,6 +93,34 @@ export function MetaAdsPage() {
           </ChartCard>
         </>
       )}
+
+      <section className="chart-card">
+        <header><h2>Criativos ativos</h2></header>
+        {!creatives || creatives.length === 0 ? (
+          <EmptyState
+            title="Nenhum criativo ativo no momento"
+            hint="Quando a conta tiver anúncios com status ativo, os criativos aparecem aqui com a imagem em alta definição, nome e campanha — sincronizados diariamente."
+          />
+        ) : (
+          <div className="creatives-grid">
+            {creatives.map(c => {
+              const img = c.image_url || c.thumbnail_url
+              return (
+                <div className="creative-card" key={c.ad_id}>
+                  <div className="creative-thumb">
+                    {img ? <img src={img} alt={c.ad_name ?? 'criativo'} loading="lazy" /> : <div className="creative-noimg">sem imagem</div>}
+                    {c.object_type && <span className="creative-badge">{c.object_type}</span>}
+                  </div>
+                  <div className="creative-meta">
+                    <strong title={c.ad_name ?? ''}>{c.ad_name ?? 'Sem nome'}</strong>
+                    <span>{c.campaign_name ?? '—'}</span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </section>
     </>
   )
 }

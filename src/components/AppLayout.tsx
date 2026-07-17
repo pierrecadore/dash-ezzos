@@ -1,13 +1,15 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Megaphone, LineChart, Camera, Globe, User, LogOut, Users } from 'lucide-react'
+import { LayoutDashboard, Megaphone, LineChart, Camera, Globe, User, LogOut, Users, Sun, Moon } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../lib/auth'
 import { useLastSync } from '../lib/metrics'
+import { useTheme } from '../lib/theme'
 
 export function AppLayout() {
   const { profile } = useAuth()
   const nav = useNavigate()
   const lastSync = useLastSync()
+  const { theme, toggle } = useTheme()
 
   async function sair() {
     await supabase.auth.signOut()
@@ -42,6 +44,10 @@ export function AppLayout() {
           <NavLink to="/perfil" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
             <User size={16} /> Perfil
           </NavLink>
+          <button className="nav-item" onClick={toggle}>
+            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+            {theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
+          </button>
           <button className="nav-item" onClick={sair}><LogOut size={16} /> Sair</button>
           <div className="user-card">
             <div className="avatar">{(profile?.full_name ?? 'U').slice(0, 2).toUpperCase()}</div>

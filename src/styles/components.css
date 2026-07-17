@@ -133,3 +133,53 @@ input.input:focus, select.input:focus { border-color: var(--accent); outline: no
 .info-grid .lbl { font-size: 11.5px; color: var(--text-3); display: block; }
 .info-grid strong { font-size: 14px; }
 .wa { color: var(--up); }
+
+/* ===== Criativos ativos ===== */
+.creatives-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--sp-4);
+}
+.creative-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.creative-thumb {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: var(--bg);
+  overflow: hidden;
+}
+.creative-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.creative-noimg {
+  width: 100%; height: 100%;
+  display: grid; place-items: center;
+  color: var(--text-3); font-size: 12px;
+}
+.creative-badge {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
+  color: var(--text); font-size: 10px; font-weight: 600;
+  padding: 3px 8px; border-radius: 999px; text-transform: lowercase;
+}
+.creative-meta {
+  padding: var(--sp-3);
+  display: flex; flex-direction: column; gap: 3px;
+}
+.creative-meta strong {
+  font-size: 13px; line-height: 1.3;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.creative-meta span {
+  font-size: 11.5px; color: var(--text-3);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}

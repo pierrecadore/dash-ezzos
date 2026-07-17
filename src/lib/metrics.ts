@@ -51,6 +51,37 @@ export function useMetaMetrics(period: Period, clientId?: string) {
   return { rows, error, loading: rows === null && !error }
 }
 
+export type Creative = {
+  ad_id: string
+  ad_name: string | null
+  status: string | null
+  campaign_name: string | null
+  adset_name: string | null
+  thumbnail_url: string | null
+  image_url: string | null
+  object_type: string | null
+}
+
+/** Criativos ativos do cliente (Meta). */
+export function useCreatives(clientId?: string) {
+  const [rows, setRows] = useState<Creative[] | null>(null)
+  useEffect(() => {
+    let alive = true
+    async function run() {
+      let q = supabase
+        .from('meta_ads_creatives')
+        .select('ad_id,ad_name,status,campaign_name,adset_name,thumbnail_url,image_url,object_type')
+        .order('updated_at', { ascending: false })
+      if (clientId) q = q.eq('client_id', clientId)
+      const { data } = await q
+      if (alive) setRows((data ?? []) as Creative[])
+    }
+    run()
+    return () => { alive = false }
+  }, [clientId])
+  return { creatives: rows, loading: rows === null }
+}
+
 /** Última sincronização registrada (sync_runs). */
 export function useLastSync(clientId?: string) {
   const [last, setLast] = useState<{ status: string; finished_at: string; provider: string } | null>(null)
